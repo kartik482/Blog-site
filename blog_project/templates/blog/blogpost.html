@@ -1,0 +1,131 @@
+{% extends "base.html"%}
+{%block title%} BLOGPOST {%endblock%}
+{% block body %}
+{% load static %}
+{% load extras %}
+<div class="container my-3">
+  <article class="blog-post">
+    <h2 class="blog-post-title mb-1">{{post.title}}</h2>
+    <p class="blog-post-meta">{{post.timestamp}} by <a href="#">{{post.author}}</a> <span> ,({{post.views}} views)</span></p>
+    
+    
+    <p>{{post.content|safe}}</p>
+</div>
+</div>
+
+<div class="container">
+  <h2>Comments ({{comments.count}}):</h2>
+  {% if user.is_anonymous %}
+
+  <!-- <p class="box">Please Login To Comment</p> -->
+
+    <div class="card card-body">
+        <div class="mb-2">
+          <p  class="form-label my-0">PLEASE LOGIN TO COMMENT</p>
+        </div>
+    </div>
+
+
+  {% else %}
+
+  <form action="/blog/postcomment/" method="post">{% csrf_token %}
+    <input type="hidden" name="postSno" value="{{post.s_no}}">
+
+    <div class="mb-3">
+      <label for="comment" class="form-label">Comment</label>
+      <textarea class="form-control" id="comment" rows="3" placeholder="enter your comment here"
+        name="comment" required></textarea>
+        <input type="hidden" name="parentsno" value="">
+    </div>
+    <button type="submit" class="btn btn-outline-success">Submit</button>
+  </form>
+</div>
+
+{% endif %}
+
+
+{% for comment in comments %}
+
+
+
+<div class="container">
+  <div class="row my-3">
+    <!-- <div class="col-md-2 bg-primary rounded mx-auto d-block"><img src="/static/img/user.png" alt="" ></div> -->
+    <div class="col-md-1 bg"><img src="/static/img/user.png" class="rounded mx-auto d-block w-50" alt="..."></div>
+    <div class="col-md-11 bg"><b>{{comment.user.username}}</b> at <span
+        class="badge bg-secondary">{{comment.timestamp}}</span>
+      <div>
+        {{comment.comment}}
+      </div>
+      <div class="reply mx-0">
+        {% if user.is_anonymous %}
+        <button class="btn btn-danger" type="button" data-bs-toggle="collapse"
+        data-bs-target="#replybox{{comment.s_no}}" aria-expanded="false" aria-controls="replybox{{comment.s_no}}" disabled>
+        Login to Reply
+      </button>
+        {% else %}
+        <button class="btn btn-outline-success" type="button" data-bs-toggle="collapse"
+          data-bs-target="#replybox{{comment.s_no}}" aria-expanded="false" aria-controls="replybox{{comment.s_no}}">
+          Reply
+        </button>
+
+        <div class="collapse" id="replybox{{comment.s_no}}">
+          <div class="card card-body my-2">
+            <form action="/blog/postcomment/" method="post">{% csrf_token %}
+              <input type="hidden" name="postSno" value="{{post.s_no}}">
+
+              <div class="mb-3">
+                <label for="reply" class="form-label">Reply</label>
+                <textarea class="form-control" id="reply" rows="3" placeholder="enter your reply here"
+                  name="comment"></textarea>
+                  <input type="hidden" name="parentsno" value="{{comment.s_no}}"> 
+              </div>
+              <button type="submit" class="btn btn-outline-success">Submit</button>
+            </form>
+          </div>
+        </div>
+        
+        <div class="replies my-2">
+          {% endif %}
+          <br>
+          <br>
+        {% for reply in repdict|get_val:comment.s_no %}
+          <div class="row">
+        <div class="col-md-1 bg"><img src="/static/img/user.png" class="rounded mx-auto d-block w-50" alt="..."></div>
+        <div class="col-md-11 bg"><b>{{reply.user.username}}</b> at <span
+            class="badge bg-secondary">{{reply.timestamp}}</span>
+          <div>
+            {{reply.comment}}
+          </div>
+        </div>
+
+       
+          <!-- {{reply.comment}} -->
+
+        
+
+
+
+      
+        
+        
+        {% endfor %}
+      </div>
+      </div>
+    </div>
+
+  </div>
+  <hr>
+
+
+
+{% endfor %}
+
+
+<!-- <div class="row my-3">
+    <div class="col-md-2 bg-primary">image here</div>
+    <div class="col-md-10 bg-success">Comment here</div>
+  </div>
+</div> -->
+
+{% endblock body %}

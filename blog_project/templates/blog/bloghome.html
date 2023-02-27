@@ -1,0 +1,43 @@
+{% extends "base.html"%}
+{%block title%} BLOG HOME {%endblock%}
+{% block body %}
+
+<div class="container">
+  <h2>Articles By BLOGSite: </h2>
+  <div class="row">
+    {% for i in allposts %}
+    <div class="col-md-6 my-3">
+        <div class="row g-0 border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative" style="height:253.6px">
+          <div class="col p-4 d-flex flex-column position-static">
+            <strong class="d-inline-block mb-2 text-primary">Article By {{i.author}}</strong>
+            <h3 class="mb-0"><a href="/blog/{{i.slug}}" class="text-dark" style="text-decoration:none;">{{i.title}}</a></h3>
+            <div class="mb-1 text-muted">{{i.timestamp}}</div>
+            <p class="card-text mb-auto"><div class="preview">{{i.content|safe| slice:"200"}}...</div> </p> <!-- use slice instead of truncatechars or face html error because i use tiny mce-->
+            <a href="/blog/{{i.slug}}" class="stretched-link">Continue reading</a>
+          </div>
+        
+        </div>
+      </div>
+      
+      {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+
+
+{%block js%}
+<script>
+let previews=document.getElementsByClassName("preview")
+Array.from(previews).forEach((element)=>{
+  element.innerHTML=element.innerText;
+})
+</script>
+
+
+
+{%endblock%}
+
+
+
+

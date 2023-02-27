@@ -1,0 +1,35 @@
+{% extends "base.html"%}
+{%block title%} CONTACT {%endblock%}
+{%block body%}
+
+
+
+<div class="container my-3">
+<h3>Contact Us</h3>
+<form class="row g-3" method="post" action="/contact/" >  {% csrf_token %}
+    <div class="col-md-12">
+      <label for="name" class="form-label">Name</label>
+      <input type="text" class="form-control" id="name" name="name">
+    </div>
+    <div class="col-md-12">
+      <label for="inputEmail4" class="form-label">Email</label>
+      <input type="email" class="form-control" id="inputEmail4" name="email">
+    </div>
+    <div class="col-md-12">
+      <label for="phone" class="form-label">Phone No.</label>
+      <input type="tel" class="form-control" id="phone" name="phone">
+    </div>
+    <div class="mb-3">
+        <label for="content" class="form-label">Enter Reason For Contact</label>
+        <textarea class="form-control" id="content" rows="3" name="content"></textarea>
+      </div>
+
+   
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </form>
+</div>
+
+
+  {%endblock%}
